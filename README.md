@@ -208,6 +208,16 @@ layout.prop( <' built-in functions example: bpy.context.view_layer.freestyle_set
 ### **Phase 03**
 
    Launch of the addon and making promotional videos/images to attract customers
+   
+ ## Update
+
+The default version in this addon is `3.4` but in some customers they want to stay on that specific versions of blender, instead of migrating them to the new versions, I will make a versions of my code that can execute in the same latest versions.
+
+**Note:** This is not a top priority, since certain previous blender versions did not support newer functions; instead, we will make minor changes to support older versions.
+
+**Structure**
+
+![Blank_diagram](https://user-images.githubusercontent.com/69900896/216997048-f29cc6e0-d6fb-4080-a582-e609c40d5ac2.svg)
 
 ### References
 
