@@ -435,7 +435,7 @@ class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
 
     @classmethod
     def poll(cls, context):
-        return not ('EDIT_MESH'==bpy.context.mode)
+        return context.active_object is not None and context.active_object.type == 'MESH'
 
     def draw_header(self, context):
         layout = self.layout
@@ -443,9 +443,14 @@ class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
     def draw(self,context):
         layout = self.layout
         my_tool = context.scene.cs_resolution
-        layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_color', text="Line Color", icon_value=0, emboss=True)
-        layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_priority', text="Priority", icon_value=0, emboss=True)
+        obj = bpy.context.view_layer.objects.active
+        if not obj.data.materials:
+            layout.label(text="Add New Material")
+        else:
+            layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_color', text="Line Color", icon_value=0, emboss=True)
+            layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_priority', text="Priority", icon_value=0, emboss=True)
         return None
+
 
 class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Outline"
@@ -482,9 +487,6 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_suggestive_contour', text='Suggestive Contour', icon_value=0, emboss=True)
         layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
         return None
-
-
-
 
 classes = (
     PiXel_pg_Resolution,
