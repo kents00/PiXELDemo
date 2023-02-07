@@ -184,15 +184,19 @@ layout.prop( <' built-in functions example: bpy.context.view_layer.freestyle_set
 
 ![Screenshot_(906)](https://user-images.githubusercontent.com/69900896/214346926-edaa6cdd-1bbc-440f-9cff-4a07a52d7354.png)
 
+- [x]  Add / import the custom node group in compositing tab and connect the nodes
 
+![Untitled 1](https://user-images.githubusercontent.com/69900896/214346835-3ed2b37c-1cc3-42c3-b7c2-cd7a74a21f26.png)
+
+- [x]  Create a decorators to your classes
+    
+    [Decorators and Polling - Have I Got This Right?](https://blenderartists.org/t/decorators-and-polling-have-i-got-this-right/565611/2)
+    
 - [ ]  Refactor outline section; there are two different `Freestyle Lines`
     - **Materials Properties**
         - Each material you can assign the outlines
     - **View Layer Properties**
         - Main freestyle line
-- [ ]  Add / import the custom node group in compositing tab and connect the nodes
-
-![Untitled 1](https://user-images.githubusercontent.com/69900896/214346835-3ed2b37c-1cc3-42c3-b7c2-cd7a74a21f26.png)
 
 
 ## Road Map
