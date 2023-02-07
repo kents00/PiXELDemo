@@ -335,7 +335,7 @@ class PiXel_op_Setup(Operator):
         bpy.context.scene.frame_end = 1
         bpy.context.scene.render.image_settings.compression = 0
         bpy.context.scene.view_settings.view_transform = 'Standard'
-        bpy.context.scene.view_layers["ViewLayer"].use_freestyle = True
+        bpy.context.scene.render.use_freestyle = True
         bpy.context.scene.render.engine = 'BLENDER_EEVEE'
         bpy.context.scene.eevee.use_soft_shadows = False
         bpy.context.scene.render.dither_intensity = 0
