@@ -13,6 +13,8 @@ bl_info = {
 
 import bpy
 
+from . import addon_updater_ops
+
 from bpy.props import (
         StringProperty,
         EnumProperty,
@@ -488,6 +490,93 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
         return None
 
+
+# Addon Updater SECTION
+class PiXel_pl_UpdaterPanel(bpy.types.Panel):
+	"""Panel to popup notice and ignoring functionality"""
+	bl_label = "Updater PiXeL Panel"
+	bl_idname = "PiXel_pl_UpdaterPanel"
+	bl_space_type = 'VIEW_3D'
+	bl_region_type = 'TOOLS' if bpy.app.version < (2, 80) else 'UI'
+	bl_context = "objectmode"
+	bl_category = "Tools"
+
+	def draw(self, context):
+		layout = self.layout
+
+		# Call to check for update in background.
+		# Note: built-in checks ensure it runs at most once, and will run in
+		# the background thread, not blocking or hanging blender.
+		# Internally also checks to see if auto-check enabled and if the time
+		# interval has passed.
+		addon_updater_ops.check_for_update_background()
+
+		layout.label(text="PiXel Updater")
+		layout.label(text="")
+
+		col = layout.column()
+		col.scale_y = 0.7
+		col.label(text="If an update is ready,")
+		col.label(text="popup triggered by opening")
+		col.label(text="this panel, plus a box ui")
+
+		# Could also use your own custom drawing based on shared variables.
+		if addon_updater_ops.updater.update_ready:
+			layout.label(text="Custom update message", icon="INFO")
+		layout.label(text="")
+
+		# Call built-in function with draw code/checks.
+		addon_updater_ops.update_notice_box_ui(self, context)
+
+@addon_updater_ops.make_annotations
+class PiXel_pdtr_Preferences(bpy.types.AddonPreferences):
+	"""Demo bare-bones preferences"""
+	bl_idname = __package__
+
+	# Addon updater preferences.
+
+	auto_check_update = bpy.props.BoolProperty(
+		name="Auto-check for Update",
+		description="If enabled, auto-check for updates using an interval",
+		default=False)
+
+	updater_interval_months = bpy.props.IntProperty(
+		name='Months',
+		description="Number of months between checking for updates",
+		default=0,
+		min=0)
+
+	updater_interval_days = bpy.props.IntProperty(
+		name='Days',
+		description="Number of days between checking for updates",
+		default=7,
+		min=0,
+		max=31)
+
+	updater_interval_hours = bpy.props.IntProperty(
+		name='Hours',
+		description="Number of hours between checking for updates",
+		default=0,
+		min=0,
+		max=23)
+
+	updater_interval_minutes = bpy.props.IntProperty(
+		name='Minutes',
+		description="Number of minutes between checking for updates",
+		default=0,
+		min=0,
+		max=59)
+
+	def draw(self, context):
+		layout = self.layout
+
+		# Works best if a column, or even just self.layout.
+		mainrow = layout.row()
+		col = mainrow.column()
+
+		# Updater draw function, could also pass in col as third arg.
+		addon_updater_ops.update_settings_ui(self, context)
+
 classes = (
     PiXel_pg_Resolution,
     PiXel_pl_Setup,
@@ -497,16 +586,20 @@ classes = (
     PiXel_pl_Outline_VLP,
     PiXel_op_Setup,
     PiXel_op_Resolution,
+    PiXel_pl_UpdaterPanel,
+    PiXel_pdtr_Preferences
 )
 
 def register():
+    addon_updater_ops.register(bl_info)
+
     for cls in classes:
         bpy.utils.register_class(cls)
-
         bpy.types.Scene.cs_resolution = bpy.props.PointerProperty(type= PiXel_pg_Resolution)
 
-
 def unregister():
+    addon_updater_ops.unregister()
+
     for cls in classes:
         bpy.utils.unregister_class(cls)
         del bpy.types.Scene.cs_resolution
