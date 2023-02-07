@@ -2,7 +2,7 @@ bl_info = {
     "name" : "PiXel",
     "blender" : (3,2,2),
     "version" : (1,0,0),
-    "category" : "System",
+    "category" : "3D View",
     "author" : "Kent Edoloverio",
     "location" : "Sample > Smaple > Sample",
     "description" : "Converts your meshes into pixel art",
@@ -95,7 +95,7 @@ class PiXel_op_Resolution(Operator):
         elif custom_res_property.pixel_enum == "S6":
             bpy.context.scene.render.resolution_x = int(custom_res_property.custom_height)
             bpy.context.scene.render.resolution_y = int(custom_res_property.custom_width)
-        return {"FINISHED"}
+        return {'FINISHED'}
 
 class PiXel_op_Setup(Operator):
     bl_label = "Setup Project"
@@ -128,11 +128,11 @@ class PiXel_op_Setup(Operator):
         fakebits.outputs.new('NodeSocketColor', 'Image')
 
         gamma_1 = fakebits.nodes.new("CompositorNodeGamma")
-        gamma_1.inputs[1].default_value = 1
+        gamma_1.inputs[1].default_value = 0.445
         gamma_1.location = (-400, 350)
 
         gamma_2 = fakebits.nodes.new("CompositorNodeGamma")
-        gamma_2.inputs[1].default_value = 1
+        gamma_2.inputs[1].default_value = 0.445
         gamma_2.location = (750, 350)
 
         separate_color = fakebits.nodes.new("CompositorNodeSeparateColor")
@@ -235,18 +235,18 @@ class PiXel_op_Setup(Operator):
 
         subtract_math_1 = posterize_channel_1.nodes.new("CompositorNodeMath")
         subtract_math_1.operation = "SUBTRACT"
-        subtract_math_1.inputs[1].default_value = 0.985
+        subtract_math_1.inputs[1].default_value = 1
         subtract_math_1.location = (-400, 250)
         subtract_math_2 = posterize_channel_2.nodes.new("CompositorNodeMath")
         subtract_math_2.operation = "SUBTRACT"
-        subtract_math_2.inputs[1].default_value = 0.985
+        subtract_math_2.inputs[1].default_value = 1
         subtract_math_2.location = (-400, 250)
         subtract_math_3 = posterize_channel_3.nodes.new("CompositorNodeMath")
-        subtract_math_3.inputs[1].default_value = 0.985
+        subtract_math_3.inputs[1].default_value = 1
         subtract_math_3.operation = "SUBTRACT"
         subtract_math_3.location = (-400, 250)
         subtract_math_4 = posterize_channel_4.nodes.new("CompositorNodeMath")
-        subtract_math_4.inputs[1].default_value = 0.985
+        subtract_math_4.inputs[1].default_value = 1
         subtract_math_4.operation = "SUBTRACT"
         subtract_math_4.location = (-400, 250)
 
@@ -325,7 +325,7 @@ class PiXel_op_Setup(Operator):
         bpy.context.scene.node_tree.links.new(FB_group_node.outputs[0], comp.inputs[0])
         bpy.context.scene.node_tree.links.new(render_layers.outputs[0], FB_group_node.inputs[0])
 
-        return {"FINISHED"}
+        return {'FINISHED'}
 
     def execute(self, context):
         bpy.context.scene.use_nodes = True
@@ -334,13 +334,14 @@ class PiXel_op_Setup(Operator):
         bpy.context.scene.render.image_settings.compression = 0
         bpy.context.scene.view_settings.view_transform = 'Standard'
         bpy.context.scene.view_layers["ViewLayer"].use_freestyle = True
+        bpy.context.scene.render.engine = 'BLENDER_EEVEE'
         bpy.context.scene.eevee.use_soft_shadows = False
         bpy.context.scene.render.dither_intensity = 0
         bpy.context.scene.eevee.taa_render_samples = 20
         bpy.context.scene.eevee.taa_samples = 20
 
         self.create_group(context)
-        return {"FINISHED"}
+        return {'FINISHED'}
 
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
@@ -352,6 +353,15 @@ class PiXel_pl_Base:
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
     bl_label = "PiXel"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_context = ''
+    bl_order = 0
+    bl_ui_units_x=0
+
+    @classmethod
+    def poll(cls, context):
+        return not False
 
     def draw(self, context):
         layout = self.layout
@@ -361,10 +371,15 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
 class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
     bl_label = "Resolution"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_context = ''
+    bl_order = 0
+    bl_ui_units_x=0
 
     @classmethod
-    def poll(self, context):
-        return (context.object is not None)
+    def poll(cls, context):
+        return not False
 
     def draw(self, context):
         layout = self.layout
@@ -393,31 +408,66 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 class PiXel_pl_Outline(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
     bl_label = "Outline"
+    bl_region_type = 'UI'
+    bl_space_type = 'VIEW_3D'
+    bl_options = {'HEADER_LAYOUT_EXPAND', 'DEFAULT_CLOSED'}
+    bl_ui_units_x=0
+    bl_order = 0
+
+    @classmethod
+    def poll(cls, context):
+        return not (False)
+
+    def draw_header(self, context):
+        layout = self.layout
 
     def draw(self, context):
-        return {"FINISHED"}
+        layout = self.layout
 
 class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Outline"
     bl_label = "Materials Properties"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_context = ''
+    bl_order = 0
+    bl_ui_units_x=0
+
+    @classmethod
+    def poll(cls, context):
+        return not ('EDIT_MESH'==bpy.context.mode)
+
+    def draw_header(self, context):
+        layout = self.layout
 
     def draw(self,context):
         layout = self.layout
         my_tool = context.scene.cs_resolution
         layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_color', text="Line Color", icon_value=0, emboss=True)
         layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_priority', text="Priority", icon_value=0, emboss=True)
-        return {"FINISHED"}
+        return None
 
 class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Outline"
     bl_label = "View Layer Properties"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_context = ''
+    bl_order = 0
+    bl_ui_units_x=0
+
+    @classmethod
+    def poll(cls, context):
+        return not ('EDIT_MESH'==bpy.context.mode)
+
+    def draw_header(self, context):
+        layout = self.layout
 
     def draw(self,context):
         obj = bpy.context.object
         layout = self.layout
         my_tool = context.scene.cs_resolution
 
-        layout.label(text='Freestyle Color', icon_value=0)
         layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'color', text='Line Color', icon_value=0, emboss=True)
         layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'thickness', text='Line Thickness', icon_value=0, emboss=True)
 
@@ -431,7 +481,10 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_material_boundary', text='Material Boundary', icon_value=0, emboss=True)
         layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_suggestive_contour', text='Suggestive Contour', icon_value=0, emboss=True)
         layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
-        return{"FINISHED"}
+        return None
+
+
+
 
 classes = (
     PiXel_pg_Resolution,
