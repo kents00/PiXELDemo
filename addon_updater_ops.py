@@ -31,7 +31,7 @@ from bpy.app.handlers import persistent
 # Prevents popups for users with invalid python installs e.g. missing libraries
 # and will replace with a fake class instead if it fails (so UI draws work).
 try:
-    from .addon_updater import Updater as updater
+    from .blender-addon-updater-1.1.1.addon_updater import Updater as updater
 except Exception as e:
     print("ERROR INITIALIZING UPDATER")
     print(str(e))
@@ -72,7 +72,7 @@ except Exception as e:
 # not match and have errors. Must be all lowercase and no spaces! Should also
 # be unique among any other addons that could exist (using this updater code),
 # to avoid clashes in operator registration.
-updater.addon = "knty_pixel"
+updater.addon = "addon_updater_demo"
 
 
 # -----------------------------------------------------------------------------
@@ -1350,7 +1350,7 @@ def register(bl_info):
     # **WARNING** Depending on the engine, this token can act like a password!!
     # Only provide a token if the project is *non-public*, see readme for
     # other considerations and suggestions from a security standpoint.
-    updater.private_token = "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"  # "tokenstring"
+    updater.private_token = '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'  # "tokenstring"
 
     # Choose your own username, must match website (not needed for GitLab).
     updater.user = "kents00"
@@ -1485,7 +1485,7 @@ def register(bl_info):
     # Set the min and max versions allowed to install.
     # Optional, default None
     # min install (>=) will install this and higher
-    updater.version_min_update = (2, 8, 0)
+    updater.version_min_update = (0, 0, 0)
     # updater.version_min_update = None  # None or default for no minimum.
 
     # Max install (<) will install strictly anything lower than this version
