@@ -1350,7 +1350,7 @@ def register(bl_info):
     # **WARNING** Depending on the engine, this token can act like a password!!
     # Only provide a token if the project is *non-public*, see readme for
     # other considerations and suggestions from a security standpoint.
-    updater.private_token = "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"  # "tokenstring"
+    updater.private_token = "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"  # "tokenstring"
 
     # Choose your own username, must match website (not needed for GitLab).
     updater.user = "kents00"
