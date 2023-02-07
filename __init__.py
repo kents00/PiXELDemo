@@ -1,12 +1,12 @@
 bl_info = {
     "name" : "PiXel",
-    "blender" : (3,2,2),
-    "version" : (1,0,0),
+    "blender" : (3,4,1),
+    "version" : (1,9,23),
     "category" : "3D View",
     "author" : "Kent Edoloverio",
-    "location" : "Sample > Smaple > Sample",
+    "location" : "3D View > PiXel",
     "description" : "Converts your meshes into pixel art",
-    "warning" : "",
+    "warning" : "It may not work properly",
     "wiki_url" : "",
     "tracker_url" : "",
 }
