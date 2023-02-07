@@ -30,8 +30,9 @@ from bpy.app.handlers import persistent
 # Safely import the updater.
 # Prevents popups for users with invalid python installs e.g. missing libraries
 # and will replace with a fake class instead if it fails (so UI draws work).
+
 try:
-    from .blender-addon-updater-1.1.1.addon_updater import Updater as updater
+    from .addon_updater import Updater as updater
 except Exception as e:
     print("ERROR INITIALIZING UPDATER")
     print(str(e))
@@ -1341,8 +1342,8 @@ def register(bl_info):
     updater.clear_state()  # Clear internal vars, avoids reloading oddities.
 
     # Confirm your updater "engine" (Github is default if not specified).
-    updater.engine = "Github"
-    # updater.engine = "GitLab"
+    updater.engine = "GitLab"
+    # updater.engine = "Github"
     # updater.engine = "Bitbucket"
 
     # If using private repository, indicate the token here.
@@ -1350,14 +1351,14 @@ def register(bl_info):
     # **WARNING** Depending on the engine, this token can act like a password!!
     # Only provide a token if the project is *non-public*, see readme for
     # other considerations and suggestions from a security standpoint.
-    updater.private_token = "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"  # "tokenstring"
+    updater.private_token = None  # "tokenstring"
 
     # Choose your own username, must match website (not needed for GitLab).
-    updater.user = "kents00"
+    updater.user = ""
 
     # Choose your own repository, must match git name for GitHUb and Bitbucket,
     # for GitLab use project ID (numbers only).
-    updater.repo = "piXel"
+    updater.repo = "43289498"
 
     # updater.addon = # define at top of module, MUST be done first
 
