@@ -130,11 +130,11 @@ class PiXel_op_Setup(Operator):
         fakebits.outputs.new('NodeSocketColor', 'Image')
 
         gamma_1 = fakebits.nodes.new("CompositorNodeGamma")
-        gamma_1.inputs[1].default_value = 0.445
+        gamma_1.inputs[1].default_value = 0.985
         gamma_1.location = (-400, 350)
 
         gamma_2 = fakebits.nodes.new("CompositorNodeGamma")
-        gamma_2.inputs[1].default_value = 0.445
+        gamma_2.inputs[1].default_value = 0.985
         gamma_2.location = (750, 350)
 
         separate_color = fakebits.nodes.new("CompositorNodeSeparateColor")
@@ -321,7 +321,7 @@ class PiXel_op_Setup(Operator):
         # Add the node group to the compositor
         FB_group_node = bpy.context.scene.node_tree.nodes.new("CompositorNodeGroup")
         FB_group_node.node_tree = fakebits
-        FB_group_node.inputs[1].default_value = 16
+        FB_group_node.inputs[1].default_value = 32
         FB_group_node.location = (200,350)
 
         bpy.context.scene.node_tree.links.new(FB_group_node.outputs[0], comp.inputs[0])
