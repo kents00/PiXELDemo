@@ -27,6 +27,7 @@ from bpy.types import (
         PropertyGroup,
         Panel,
         Operator,
+        AddonPreferences,
 )
 
 class PiXel_pg_Resolution(PropertyGroup):
@@ -54,12 +55,6 @@ class PiXel_pg_Resolution(PropertyGroup):
     check_box_trans : BoolProperty  (
         name = "Transparent Backgroud",
         default = True
-    )
-    mp_color_picker : FloatVectorProperty (
-        name = "Line Color",
-        subtype = "COLOR",
-        default = (1.0,1.0,1.0,1.0),
-        size = 4
     )
 
 class PiXel_op_Resolution(Operator):
@@ -379,7 +374,7 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
 
         # Could also use your own custom drawing based on shared variables.
         if addon_updater_ops.updater.update_ready:
-            layout.label(text="Custom update message", icon="INFO")
+            layout.label(text="PiXel Successfuly Update", icon="INFO")
 
 		# Call built-in function with draw code/checks.
         addon_updater_ops.update_notice_box_ui(self, context)
@@ -459,10 +454,9 @@ class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
 
     def draw(self,context):
         layout = self.layout
-        my_tool = context.scene.cs_resolution
         obj = bpy.context.view_layer.objects.active
         if not obj.data.materials:
-            layout.label(text="Add New Material")
+            layout.label(text="Add New Material", icon="ERROR")
         else:
             layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_color', text="Line Color", icon_value=0, emboss=True)
             layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_priority', text="Priority", icon_value=0, emboss=True)
@@ -490,26 +484,29 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         layout = self.layout
         my_tool = context.scene.cs_resolution
 
-        layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'color', text='Line Color', icon_value=0, emboss=True)
-        layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'thickness', text='Line Thickness', icon_value=0, emboss=True)
+        if bpy.context.scene.render.use_freestyle == False:
+            layout.label(text="Please Enable Freestyle", icon_value="ERROR")
 
-        layout.label(text='Edge Type ', icon_value=0)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_silhouette', text='Silhouette', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_crease', text='Crease', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_border', text='Border', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_edge_mark', text='Edge Mark', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_contour', text='Contour', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_external_contour', text='External Contour', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_material_boundary', text='Material Boundary', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_suggestive_contour', text='Suggestive Contour', icon_value=0, emboss=True)
-        layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
+        else:
+            layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'color', text='Line Color', icon_value=0, emboss=True)
+            layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'thickness', text='Line Thickness', icon_value=0, emboss=True)
+
+            layout.label(text='Edge Type ', icon_value=0)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_silhouette', text='Silhouette', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_crease', text='Crease', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_border', text='Border', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_edge_mark', text='Edge Mark', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_contour', text='Contour', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_external_contour', text='External Contour', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_material_boundary', text='Material Boundary', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_suggestive_contour', text='Suggestive Contour', icon_value=0, emboss=True)
+            layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
         return None
-
 
 # Addon Updater
 
 @addon_updater_ops.make_annotations
-class PiXel_pdtr_Preferences(bpy.types.AddonPreferences):
+class PiXel_pdtr_Preferences(AddonPreferences):
 	"""Demo bare-bones preferences"""
 	bl_idname = __package__
 
@@ -566,7 +563,7 @@ classes = (
     PiXel_pl_Outline_VLP,
     PiXel_op_Setup,
     PiXel_op_Resolution,
-    PiXel_pdtr_Preferences
+    PiXel_pdtr_Preferences,
 )
 
 def register():
