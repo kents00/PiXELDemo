@@ -23,9 +23,6 @@ Implements draw calls, popups, and operators that use the addon_updater.
 
 import os
 import traceback
-from dotenv import load_dotenv
-
-load_dotenv()
 
 import bpy
 from bpy.app.handlers import persistent
