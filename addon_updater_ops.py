@@ -1345,7 +1345,7 @@ def register(bl_info):
     updater.clear_state()  # Clear internal vars, avoids reloading oddities.
 
     # Confirm your updater "engine" (Github is default if not specified).
-    updater.engine = os.getenv("ENGINE")
+    updater.engine = "Gitlab"
     # updater.engine = "Gitlab"
     # updater.engine = "Github"
     # updater.engine = "Bitbucket"
@@ -1355,19 +1355,19 @@ def register(bl_info):
     # **WARNING** Depending on the engine, this token can act like a password!!
     # Only provide a token if the project is *non-public*, see readme for
     # other considerations and suggestions from a security standpoint.
-    updater.private_token = os.getenv("TOKEN")  # "tokenstring"
+    updater.private_token = "glpat-7gfbRShguWhMGx3K11SW"  # "tokenstring"
 
     # Choose your own username, must match website (not needed for GitLab).
     updater.user = ""
 
     # Choose your own repository, must match git name for GitHUb and Bitbucket,
     # for GitLab use project ID (numbers only).
-    updater.repo = os.getenv("REPO")
+    updater.repo = "43289498"
 
     # updater.addon = # define at top of module, MUST be done first
 
     # Website for manual addon download, optional but recommended to set.
-    updater.website = os.getenv("WEBSITE")
+    updater.website = "https://github.com/kents00/piXel"
 
     # Addon subfolder path.
     # "sample/path/to/addon"
