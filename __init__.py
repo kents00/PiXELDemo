@@ -344,8 +344,8 @@ class PiXel_op_Setup(Operator):
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "Tools"
-    bl_options = {"DEFAULT_CLOSED"}
+    bl_options = {'HEADER_LAYOUT_EXPAND'}
+    bl_order = 0
 
 
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
