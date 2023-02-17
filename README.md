@@ -49,13 +49,19 @@ layout.prop( <' built-in functions example: bpy.context.view_layer.freestyle_set
 
 
     ![Screenshot_(910)](https://user-images.githubusercontent.com/69900896/214347044-60c2eb16-c434-4370-b64e-79d740919f3f.png)
+    
 
-
+- Changing the `Gamma Node` will filter out the colors on your textured meshes
+- `Color per Channel` it changes the color depth to all of your meshes
+    
+    [Color depth - Wikipedia](https://en.wikipedia.org/wiki/Color_depth)
+    
 
 ## Bugs / Problems
 
 - You cannot register two or more `Property Group` and declare a custom scene at the same time as a result it returns an **error message**
--
+- Not Adding decorators to your classes can have a possibility to have an `error`
+- Older versions can cause also a `bug` try removing their folders inside the `Blender Foundation`
 
 ## Task
 
