@@ -347,6 +347,10 @@ class PiXel_pl_Base:
     bl_options = {'HEADER_LAYOUT_EXPAND'}
     bl_order = 0
 
+    @classmethod
+    def poll(cls, context):
+        return context.scene.render.engine == 'BLENDER_EEVEE'
+
 
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
@@ -364,15 +368,7 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     def draw(self, context):
         layout = self.layout
         layout.operator("pixel.op_setup_operator")
-
-        # Call to check for update in background.
-		# Note: built-in checks ensure it runs at most once, and will run in
-		# the background thread, not blocking or hanging blender.
-		# Internally also checks to see if auto-check enabled and if the time
-		# interval has passed.
         addon_updater_ops.check_for_update_background()
-
-        # Could also use your own custom drawing based on shared variables.
         if addon_updater_ops.updater.update_ready:
             layout.label(text="PiXel Successfuly Update", icon="INFO")
 
