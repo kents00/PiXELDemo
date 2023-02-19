@@ -337,7 +337,6 @@ class PiXel_op_Setup(Operator):
         bpy.context.scene.eevee.taa_render_samples = 20
         bpy.context.scene.eevee.taa_samples = 20
 
-
         self.create_group(context)
         return {'FINISHED'}
 
@@ -503,7 +502,6 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
 
 @addon_updater_ops.make_annotations
 class PiXel_pdtr_Preferences(AddonPreferences):
-	"""Demo bare-bones preferences"""
 	bl_idname = __package__
 
 	# Addon updater preferences.
