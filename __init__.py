@@ -1,12 +1,12 @@
 bl_info = {
     "name" : "PiXel",
     "blender" : (3,4,1),
-    "version" : (1,9,23),
+    "version" : (2,22,23),
     "category" : "3D View",
     "author" : "Kent Edoloverio",
     "location" : "3D View > PiXel",
-    "description" : "Converts your meshes into pixel art",
-    "warning" : "It may not work properly",
+    "description" : "Converts your objects into pixel art",
+    "warning" : "",
     "wiki_url" : "",
     "tracker_url" : "",
 }
@@ -541,11 +541,9 @@ class PiXel_pdtr_Preferences(AddonPreferences):
 	def draw(self, context):
 		layout = self.layout
 
-		# Works best if a column, or even just self.layout.
 		mainrow = layout.row()
 		col = mainrow.column()
 
-		# Updater draw function, could also pass in col as third arg.
 		addon_updater_ops.update_settings_ui(self, context)
 
 classes = (
