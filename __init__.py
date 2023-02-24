@@ -354,7 +354,7 @@ class PiXel_pl_Base:
 
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
-    bl_label = "PiXel"
+    bl_label = "PiXEL"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS' if bpy.app.version < (2, 80) else 'UI'
     bl_context = ''
