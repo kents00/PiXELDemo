@@ -344,6 +344,7 @@ class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_options = {'HEADER_LAYOUT_EXPAND'}
+    bl_category = "PiXel"
     bl_order = 0
 
     @classmethod
