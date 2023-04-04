@@ -1352,7 +1352,7 @@ def register(bl_info):
     # **WARNING** Depending on the engine, this token can act like a password!!
     # Only provide a token if the project is *non-public*, see readme for
     # other considerations and suggestions from a security standpoint.
-    updater.private_token = "glpat-7gfbRShguWhMGx3K11SW"  # "tokenstring"
+    updater.private_token = "glpat-qmgdrzBSx385qTwZDQN7"  # "tokenstring"
 
     # Choose your own username, must match website (not needed for GitLab).
     updater.user = ""
@@ -1364,7 +1364,7 @@ def register(bl_info):
     # updater.addon = # define at top of module, MUST be done first
 
     # Website for manual addon download, optional but recommended to set.
-    updater.website = "https://github.com/kents00/piXel"
+    updater.website = "https://kentedoloverio.gumroad.com/l/PiXEL"
 
     # Addon subfolder path.
     # "sample/path/to/addon"
