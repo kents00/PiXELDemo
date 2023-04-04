@@ -18,10 +18,8 @@ from . import addon_updater_ops
 from bpy.props import (
         StringProperty,
         EnumProperty,
-        BoolProperty,
-        PointerProperty,
-        FloatVectorProperty,
-        )
+        BoolProperty
+)
 
 from bpy.types import (
         PropertyGroup,
@@ -343,8 +341,8 @@ class PiXel_op_Setup(Operator):
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "PiXEL"
     bl_options = {'HEADER_LAYOUT_EXPAND'}
+    bl_category = "PiXel"
     bl_order = 0
 
     @classmethod
@@ -354,7 +352,7 @@ class PiXel_pl_Base:
 
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
-    bl_label = "PiXEL"
+    bl_label = "PiXel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS' if bpy.app.version < (2, 80) else 'UI'
     bl_context = ''
@@ -571,7 +569,7 @@ def unregister():
 
     for cls in classes:
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.cs_resolution
+        del bpy.types.Scene.cs_resolution
 
 if __name__ == "__main__":
     register()
