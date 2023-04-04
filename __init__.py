@@ -18,10 +18,8 @@ from . import addon_updater_ops
 from bpy.props import (
         StringProperty,
         EnumProperty,
-        BoolProperty,
-        PointerProperty,
-        FloatVectorProperty,
-        )
+        BoolProperty
+)
 
 from bpy.types import (
         PropertyGroup,
