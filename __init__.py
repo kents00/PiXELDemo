@@ -389,11 +389,14 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 
     def draw(self, context):
         layout = self.layout
-        row = layout.row(align=True)
         scene = context.scene
         mytool = context.scene.cs_resolution
-
-        layout.prop(mytool, "pixel_enum")
+	
+	col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 2.0
+        col.scale_y = 2.0
+        col.prop(mytool, "pixel_enum")
 
         if mytool.pixel_enum == "S6":
             box = layout.box()
@@ -422,7 +425,7 @@ class PiXel_pl_Outline(PiXel_pl_Base,Panel):
 
     @classmethod
     def poll(cls, context):
-        return not (False)
+        return True
 
     def draw_header(self, context):
         layout = self.layout
@@ -454,7 +457,7 @@ class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
         else:
             layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_color', text="Line Color", icon_value=0, emboss=True)
             layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_priority', text="Priority", icon_value=0, emboss=True)
-        return None
+        return {'FINISHED'}
 
 
 class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
@@ -478,13 +481,11 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         layout = self.layout
         my_tool = context.scene.cs_resolution
 
-        if bpy.context.scene.render.use_freestyle == False:
+        if bpy.context.scene.render.use_freestyle or False:
             layout.label(text="Please Enable Freestyle", icon_value="ERROR")
-
         else:
             layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'color', text='Line Color', icon_value=0, emboss=True)
             layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'thickness', text='Line Thickness', icon_value=0, emboss=True)
-
             layout.label(text='Edge Type ', icon_value=0)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_silhouette', text='Silhouette', icon_value=0, emboss=True)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_crease', text='Crease', icon_value=0, emboss=True)
