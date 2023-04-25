@@ -1,7 +1,7 @@
 bl_info = {
     "name" : "PiXel",
     "blender" : (3,4,1),
-    "version" : (2,22,23),
+    "version" : (4,25,23),
     "category" : "3D View",
     "author" : "Kent Edoloverio",
     "location" : "3D View > PiXel",
