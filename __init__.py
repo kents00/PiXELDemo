@@ -30,7 +30,7 @@ from bpy.types import (
 
 class PiXel_pg_Resolution(PropertyGroup):
     pixel_enum: EnumProperty(
-        name = "Resolution",
+        name = "",
         description = "resolution of your pixel art",
         items = [
             ("S1", "16 X 16",""),
@@ -376,7 +376,7 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
         if addon_updater_ops.updater.update_ready:
             layout.label(text="PiXel Successfuly Update", icon="INFO")
 
-		# Call built-in function with draw code/checks.
+        # Call built-in function with draw code/checks.
         addon_updater_ops.update_notice_box_ui(self, context)
 
 
@@ -395,7 +395,6 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 
     def draw(self, context):
         layout = self.layout
-        scene = context.scene
         mytool = context.scene.cs_resolution
 
         col = layout.row(align=False)
@@ -412,7 +411,7 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 
         if mytool.pixel_enum == "S6":
             box = layout.box()
-            row = box.row(align=True)
+            row = box.row(align=T)
             row.label(text="Width:")
             row.prop(mytool, "custom_height")
             row.label(text="px")
@@ -424,11 +423,12 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 
         layout.prop(mytool, "check_box_trans")
 
-        col = layout.row(align=True)
+        col = layout.row(align=False)
         col.enabled = True
         col.scale_x = 1.5
         col.scale_y = 1.5
         col.operator("pixel.op_resolution")
+
 
 class PiXel_pl_Outline(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
@@ -512,7 +512,7 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_material_boundary', text='Material Boundary', icon_value=0, emboss=True)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_suggestive_contour', text='Suggestive Contour', icon_value=0, emboss=True)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
-        return None
+        return {'FINISHED'}
 
 @addon_updater_ops.make_annotations
 class PiXel_pdtr_Preferences(AddonPreferences):
