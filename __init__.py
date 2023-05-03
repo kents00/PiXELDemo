@@ -1,7 +1,7 @@
 bl_info = {
     "name" : "PiXel",
     "blender" : (3,4,1),
-    "version" : (2,22,23),
+    "version" : (5,3,23),
     "category" : "3D View",
     "author" : "Kent Edoloverio",
     "location" : "3D View > PiXel",
@@ -18,10 +18,8 @@ from . import addon_updater_ops
 from bpy.props import (
         StringProperty,
         EnumProperty,
-        BoolProperty,
-        PointerProperty,
-        FloatVectorProperty,
-        )
+        BoolProperty
+)
 
 from bpy.types import (
         PropertyGroup,
@@ -343,8 +341,8 @@ class PiXel_op_Setup(Operator):
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "PiXEL"
     bl_options = {'HEADER_LAYOUT_EXPAND'}
+    bl_category = "PiXel"
     bl_order = 0
 
     @classmethod
@@ -354,7 +352,7 @@ class PiXel_pl_Base:
 
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
-    bl_label = "PiXEL"
+    bl_label = "PiXel"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'TOOLS' if bpy.app.version < (2, 80) else 'UI'
     bl_context = ''
@@ -367,7 +365,13 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.operator("pixel.op_setup_operator")
+
+        col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 1.7
+        col.scale_y = 1.7
+        col.operator("pixel.op_setup_operator")
+
         addon_updater_ops.check_for_update_background()
         if addon_updater_ops.updater.update_ready:
             layout.label(text="PiXel Successfuly Update", icon="INFO")
@@ -391,11 +395,20 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 
     def draw(self, context):
         layout = self.layout
-        row = layout.row(align=True)
         scene = context.scene
         mytool = context.scene.cs_resolution
 
-        layout.prop(mytool, "pixel_enum")
+        col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 1.3
+        col.scale_y = 1.3
+        col.label(text=r"Resolution Size :")
+
+        col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 1.5
+        col.scale_y = 1.5
+        col.prop(mytool, "pixel_enum")
 
         if mytool.pixel_enum == "S6":
             box = layout.box()
@@ -410,8 +423,12 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
             row.label(text="px")
 
         layout.prop(mytool, "check_box_trans")
-        layout.operator("pixel.op_resolution")
 
+        col = layout.row(align=True)
+        col.enabled = True
+        col.scale_x = 1.5
+        col.scale_y = 1.5
+        col.operator("pixel.op_resolution")
 
 class PiXel_pl_Outline(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
@@ -424,7 +441,7 @@ class PiXel_pl_Outline(PiXel_pl_Base,Panel):
 
     @classmethod
     def poll(cls, context):
-        return not (False)
+        return True
 
     def draw_header(self, context):
         layout = self.layout
@@ -456,7 +473,7 @@ class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
         else:
             layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_color', text="Line Color", icon_value=0, emboss=True)
             layout.prop(bpy.data.materials[bpy.context.object.data.materials[0].name], 'line_priority', text="Priority", icon_value=0, emboss=True)
-        return None
+        return {'FINISHED'}
 
 
 class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
@@ -480,13 +497,11 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         layout = self.layout
         my_tool = context.scene.cs_resolution
 
-        if bpy.context.scene.render.use_freestyle == False:
+        if bpy.context.scene.render.use_freestyle or False:
             layout.label(text="Please Enable Freestyle", icon_value="ERROR")
-
         else:
             layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'color', text='Line Color', icon_value=0, emboss=True)
             layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'thickness', text='Line Thickness', icon_value=0, emboss=True)
-
             layout.label(text='Edge Type ', icon_value=0)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_silhouette', text='Silhouette', icon_value=0, emboss=True)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_crease', text='Crease', icon_value=0, emboss=True)
@@ -498,8 +513,6 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_suggestive_contour', text='Suggestive Contour', icon_value=0, emboss=True)
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
         return None
-
-# Addon Updater
 
 @addon_updater_ops.make_annotations
 class PiXel_pdtr_Preferences(AddonPreferences):
@@ -571,7 +584,7 @@ def unregister():
 
     for cls in classes:
         bpy.utils.unregister_class(cls)
-    del bpy.types.Scene.cs_resolution
+        del bpy.types.Scene.cs_resolution
 
 if __name__ == "__main__":
     register()
