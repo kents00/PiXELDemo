@@ -498,7 +498,7 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
         my_tool = context.scene.cs_resolution
 
         if bpy.context.scene.render.use_freestyle is False:
-            layout.label(text="Please Enable Freestyle", icon_value="ERROR")
+            layout.label(text="Please Enable Freestyle", icon="ERROR")
         else:
             layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'color', text='Line Color', icon_value=0, emboss=True)
             layout.prop(bpy.data.linestyles[bpy.data.linestyles[0].name], 'thickness', text='Line Thickness', icon_value=0, emboss=True)
