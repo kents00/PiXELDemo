@@ -365,7 +365,13 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
 
     def draw(self, context):
         layout = self.layout
-        layout.operator("pixel.op_setup_operator")
+	
+	col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 1.7
+        col.scale_y = 1.7
+        col.operator("pixel.op_setup_operator")
+	
         addon_updater_ops.check_for_update_background()
         if addon_updater_ops.updater.update_ready:
             layout.label(text="PiXel Successfuly Update", icon="INFO")
@@ -394,8 +400,14 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 	
 	col = layout.row(align=False)
         col.enabled = True
-        col.scale_x = 2.0
-        col.scale_y = 2.0
+        col.scale_x = 1.3
+        col.scale_y = 1.3
+        col.label(text=r"Resolution Size :")
+        
+        col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 1.5
+        col.scale_y = 1.5
         col.prop(mytool, "pixel_enum")
 
         if mytool.pixel_enum == "S6":
@@ -411,8 +423,12 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
             row.label(text="px")
 
         layout.prop(mytool, "check_box_trans")
-        layout.operator("pixel.op_resolution")
-
+        
+	col = layout.row(align=False)
+        col.enabled = True
+        col.scale_x = 1.5
+        col.scale_y = 1.5
+        col.operator("pixel.op_resolution")
 
 class PiXel_pl_Outline(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
@@ -498,8 +514,6 @@ class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
             layout.prop(bpy.context.view_layer.freestyle_settings.linesets.active, 'select_ridge_valley', text='Ridge & Valley', icon_value=0, emboss=True)
         return None
 
-# Addon Updater
-
 @addon_updater_ops.make_annotations
 class PiXel_pdtr_Preferences(AddonPreferences):
 	bl_idname = __package__
@@ -543,7 +557,7 @@ class PiXel_pdtr_Preferences(AddonPreferences):
 
 		mainrow = layout.row()
 		col = mainrow.column()
-
+		
 		addon_updater_ops.update_settings_ui(self, context)
 
 classes = (
