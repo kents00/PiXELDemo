@@ -67,9 +67,9 @@ class PiXel_op_Resolution(Operator):
         scene = context.scene
         custom_res_property = scene.cs_resolution
 
-        if custom_res_property.check_box_trans == True :
+        if custom_res_property.check_box_trans is True :
             bpy.context.scene.render.film_transparent = True
-        elif custom_res_property.check_box_trans == False :
+        elif custom_res_property.check_box_trans is False :
             bpy.context.scene.render.film_transparent = False
 
         if custom_res_property.pixel_enum == "S1":
