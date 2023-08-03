@@ -411,7 +411,7 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 
         if mytool.pixel_enum == "S6":
             box = layout.box()
-            row = box.row(align=T)
+            row = box.row(align=True)
             row.label(text="Width:")
             row.prop(mytool, "custom_height")
             row.label(text="px")
