@@ -354,10 +354,8 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
     bl_label = "PiXel"
     bl_space_type = 'VIEW_3D'
-    bl_region_type = 'TOOLS' if bpy.app.version < (2, 80) else 'UI'
-    bl_context = ''
+    bl_region_type = "UI"
     bl_order = 0
-    bl_ui_units_x=0
 
     @classmethod
     def poll(cls, context):
