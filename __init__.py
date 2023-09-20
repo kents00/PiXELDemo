@@ -1,7 +1,7 @@
 bl_info = {
     "name" : "PiXel",
     "blender" : (3,4,1),
-    "version" : (5,3,23),
+    "version" : (1,2,4),
     "category" : "3D View",
     "author" : "Kent Edoloverio",
     "location" : "3D View > PiXel",
@@ -353,9 +353,6 @@ class PiXel_pl_Base:
 class PiXel_pl_Setup(PiXel_pl_Base,Panel):
     bl_idname = "PiXel_pl_Setup"
     bl_label = "PiXel"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = "UI"
-    bl_order = 0
 
     @classmethod
     def poll(cls, context):
@@ -381,11 +378,6 @@ class PiXel_pl_Setup(PiXel_pl_Base,Panel):
 class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
     bl_label = "Resolution"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_context = ''
-    bl_order = 0
-    bl_ui_units_x=0
 
     @classmethod
     def poll(cls, context):
@@ -431,11 +423,6 @@ class PiXel_pl_Resolution(PiXel_pl_Base,Panel):
 class PiXel_pl_Outline(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Setup"
     bl_label = "Outline"
-    bl_region_type = 'UI'
-    bl_space_type = 'VIEW_3D'
-    bl_options = {'HEADER_LAYOUT_EXPAND', 'DEFAULT_CLOSED'}
-    bl_ui_units_x=0
-    bl_order = 0
 
     @classmethod
     def poll(cls, context):
@@ -477,11 +464,6 @@ class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
 class PiXel_pl_Outline_VLP(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Outline"
     bl_label = "View Layer Properties"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_context = ''
-    bl_order = 0
-    bl_ui_units_x=0
 
     @classmethod
     def poll(cls, context):
