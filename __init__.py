@@ -437,11 +437,6 @@ class PiXel_pl_Outline(PiXel_pl_Base,Panel):
 class PiXel_pl_Outline_MP(PiXel_pl_Base,Panel):
     bl_parent_id = "PiXel_pl_Outline"
     bl_label = "Materials Properties"
-    bl_space_type = 'VIEW_3D'
-    bl_region_type = 'UI'
-    bl_context = ''
-    bl_order = 0
-    bl_ui_units_x=0
 
     @classmethod
     def poll(cls, context):
