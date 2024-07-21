@@ -207,7 +207,6 @@ class PiXel_op_Setup(Operator):
 
         return {'FINISHED'}
 
-
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -218,7 +217,6 @@ class PiXel_pl_Base:
     @classmethod
     def poll(cls, context):
         return context.scene.render.engine == 'BLENDER_EEVEE'
-
 class PiXel_pl_Setup(PiXel_pl_Base, Panel):
     bl_idname = "PiXel_pl_Setup"
     bl_label = "PiXel"
@@ -236,7 +234,6 @@ class PiXel_pl_Setup(PiXel_pl_Base, Panel):
             layout.label(text="PiXel Successfully Updated", icon="INFO")
 
         addon_updater_ops.update_notice_box_ui(self, context)
-
 class PiXel_pl_Resolution(PiXel_pl_Base, Panel):
     bl_parent_id = "PiXel_pl_Setup"
     bl_label = "Resolution"
