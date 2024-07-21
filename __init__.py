@@ -112,25 +112,6 @@ class PiXel_op_Setup(Operator):
         self.report({'INFO'}, f"Successfully appended node group: {node_group_name}")
         return {'FINISHED'}
 
-    def assign_node_group_to_material(self, context, node_group_name):
-        material = bpy.data.materials.new(name=node_group_name)
-        material.use_nodes = True
-        nodes = material.node_tree.nodes
-        links = material.node_tree.links
-
-        nodes.clear()
-        output_node = nodes.new(type='ShaderNodeOutputMaterial')
-        node_group = nodes.new(type='ShaderNodeGroup')
-        node_group.node_tree = bpy.data.node_groups.get(node_group_name)
-
-        links.new(node_group.outputs[0], output_node.inputs[0])
-
-        obj = context.active_object
-        if obj.data.materials:
-            obj.data.materials[0] = material
-        else:
-            obj.data.materials.append(material)
-
     def render_settings(self):
         bpy.context.scene.eevee.taa_render_samples = 64
         bpy.context.scene.eevee.taa_samples = 1
@@ -181,34 +162,17 @@ class PiXel_op_Setup(Operator):
         self.report({'INFO'}, "Emission Shader Applied")
         return mat
 
-    def assign_node_group_to_material(self, obj, node_group_name):
-        mat_name = node_group_name.replace(" ", "_")
-        if mat_name in bpy.data.materials:
-            mat = bpy.data.materials[mat_name]
-        else:
-            mat = bpy.data.materials.new(name=mat_name)
-            mat.use_nodes = True
-            nodes = mat.node_tree.nodes
-            links = mat.node_tree.links
+    def import_material(self, material_name):
+        with bpy.data.libraries.load(self.source_file, link=False) as (data_from, data_to):
+            if material_name in data_from.materials:
+                data_to.materials = [material_name]
 
-            for node in nodes:
-                nodes.remove(node)
+        if not data_to.materials or not data_to.materials[0]:
+            self.report({'ERROR'}, f"Failed to load the material: {material_name}")
+            return None
 
-            group_node = nodes.new(type='ShaderNodeGroup')
-            group_node.node_tree = bpy.data.node_groups[node_group_name]
-            group_node.location = (0, 0)
-
-            output_node = nodes.new(type='ShaderNodeOutputMaterial')
-            output_node.location = (200, 0)
-
-            links.new(group_node.outputs['Shader'], output_node.inputs['Surface'])
-
-        # Clear existing materials and assign only the new material
-        obj.data.materials.clear()
-        obj.data.materials.append(mat)
-
-        self.report({'INFO'}, f"Node group {node_group_name} applied as material")
-
+        self.report({'INFO'}, f"Successfully appended material: {material_name}")
+        return bpy.data.materials.get(material_name)
 
     def setup_camera(self):
         cam = bpy.context.scene.camera
@@ -226,25 +190,23 @@ class PiXel_op_Setup(Operator):
         self.solidify_modifier(context)
         self.setup_camera()
 
-        if self.import_node_group("Dither") == {'CANCELLED'}:
+        if self.import_file() == {'CANCELLED'}:
+            return {'CANCELLED'}
+
+        material = self.import_material("PiXEL Shader")
+        if material is None:
             return {'CANCELLED'}
 
         for obj in context.selected_objects:
             if obj.type == 'MESH':
-                if self.import_file() == {'CANCELLED'}:
-                    return {'CANCELLED'}
-                
-                if self.import_node_group("PiXEL Shader") == {'CANCELLED'}:
-                    return {'CANCELLED'}
-                
                 obj.data.materials.clear()
-                
-                self.assign_node_group_to_material(obj, "PiXEL Shader")
+                obj.data.materials.append(material)
 
                 emission_mat = self.create_emission_shader()
                 obj.data.materials.append(emission_mat)
 
         return {'FINISHED'}
+
 
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
