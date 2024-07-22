@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ![piXel_addonshowcase-export](https://user-images.githubusercontent.com/69900896/219953516-4c481aaa-5dd8-4359-aa42-10a1a7d73a33.png)
 
 
@@ -120,3 +121,7 @@ The default version in this addon is `3.4` but in some customers they want to st
 [Make Pixel Art EASY w/ Blender 3D](https://youtu.be/X-22q-VdPfs)
 
 [How to Make Animated PIXEL ART Characters Sprites with Blender 2.9 | Quick and Easy TUTORIAL](https://youtu.be/eSqb6II3WMM)
+=======
+# PiXELDemo
+Converts your objects into pixel art
+>>>>>>> 838e7a28805ff35526e3c67f0bad7f339926e727
