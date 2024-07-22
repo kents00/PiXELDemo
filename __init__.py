@@ -1,10 +1,10 @@
 bl_info = {
-    "name" : "PiXel",
+    "name" : "PiXEL Demo",
     "blender" : (4,1,1),
     "version" : (2,0,0),
     "category" : "3D View",
     "author" : "Kent Edoloverio",
-    "location" : "3D View > PiXel",
+    "location" : "3D View > PiXEL Demo",
     "description" : "Converts your objects into pixel art",
     "warning" : "",
     "wiki_url" : "",
@@ -13,76 +13,7 @@ bl_info = {
 
 import bpy
 import os
-from . import addon_updater_ops
-from bpy.props import (
-        StringProperty,
-        EnumProperty,
-        BoolProperty
-)
-from bpy.types import (
-        PropertyGroup,
-        Panel,
-        Operator,
-        AddonPreferences,
-)
-
-class PiXel_pg_Resolution(PropertyGroup):
-    pixel_enum: EnumProperty(
-        name="",
-        description="Resolution of your pixel art",
-        items=[
-            ("S1", "16 X 16", ""),
-            ("S2", "32 X 32", ""),
-            ("S3", "64 X 64", ""),
-            ("S4", "128 X 128", ""),
-            ("S5", "256 X 256", ""),
-            ("S6", "CUSTOM", ""),
-        ],
-    )
-    custom_width: StringProperty(
-        name="",
-        description="Custom Width",
-        default="500",
-    )
-    custom_height: StringProperty(
-        name="",
-        description="Custom Height",
-        default="500",
-    )
-    check_box_trans: BoolProperty(
-        name="Transparent Background",
-        default=True,
-    )
-
-class PiXel_op_Resolution(Operator):
-    bl_label = "Set Resolution"
-    bl_idname = "pixel.op_resolution"
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        scene = context.scene
-        custom_res_property = scene.cs_resolution
-
-        bpy.context.scene.render.film_transparent = custom_res_property.check_box_trans
-
-        resolutions = {
-            "S1": (16, 16),
-            "S2": (32, 32),
-            "S3": (64, 64),
-            "S4": (128, 128),
-            "S5": (256, 256),
-            "S6": (int(custom_res_property.custom_width), int(custom_res_property.custom_height)),
-        }
-
-        res_x, res_y = resolutions.get(custom_res_property.pixel_enum, (16, 16))
-        bpy.context.scene.render.resolution_x = res_x
-        bpy.context.scene.render.resolution_y = res_y
-
-        return {'FINISHED'}
-
+from bpy.types import Panel,Operator
 class PiXel_op_Setup(Operator):
     bl_label = "Setup Project"
     bl_idname = "pixel.op_setup_operator"
@@ -92,7 +23,7 @@ class PiXel_op_Setup(Operator):
         return True
 
     def __init__(self):
-        self.source_file = os.path.join(os.path.dirname(__file__), "..", "PiXEL/data", "PiXEL.blend")
+        self.source_file = os.path.join(os.path.dirname(__file__), "..", "PiXELDemo/data", "PiXELDemo.blend")
 
     def import_file(self):
         if not os.path.isfile(self.source_file):
@@ -206,12 +137,11 @@ class PiXel_op_Setup(Operator):
                 obj.data.materials.append(emission_mat)
 
         return {'FINISHED'}
-
 class PiXel_pl_Base:
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
     bl_options = {'HEADER_LAYOUT_EXPAND'}
-    bl_category = "PiXEL"
+    bl_category = "PiXEL Demo"
     bl_order = 0
 
     @classmethod
@@ -219,171 +149,52 @@ class PiXel_pl_Base:
         return context.scene.render.engine == 'BLENDER_EEVEE'
 class PiXel_pl_Setup(PiXel_pl_Base, Panel):
     bl_idname = "PiXel_pl_Setup"
-    bl_label = "PiXel"
+    bl_label = "PiXEL Demo"
 
     def draw(self, context):
+        pcoll = icon_preview["main"]
+        gumroad = pcoll["gumroad"]
         layout = self.layout
+        
 
         col = layout.row(align=False)
         col.scale_x = 1.7
         col.scale_y = 1.7
         col.operator("pixel.op_setup_operator")
 
-        addon_updater_ops.check_for_update_background()
-        if addon_updater_ops.updater.update_ready:
-            layout.label(text="PiXel Successfully Updated", icon="INFO")
+        box = layout.box()
+        box.scale_y = 1.5
+        box.scale_x = 1.5
+        gumroad = box.operator(
+            'wm.url_open',
+            text='BUY PIXEL PRO',
+            icon_value=gumroad.icon_id,
+            emboss=False
+        )
+        gumroad.url = 'https://kentedoloverio.gumroad.com/l/PiXEL'
 
-        addon_updater_ops.update_notice_box_ui(self, context)
-class PiXel_pl_Resolution(PiXel_pl_Base, Panel):
-    bl_parent_id = "PiXel_pl_Setup"
-    bl_label = "Resolution"
-
-    @classmethod
-    def poll(cls, context):
-        return hasattr(context.scene, 'cs_resolution')
-
-    def draw(self, context):
-        layout = self.layout
-        mytool = context.scene.cs_resolution
-
-        col = layout.row(align=False)
-        col.scale_x = 1.3
-        col.scale_y = 1.3
-        col.label(text="Resolution Size:")
-
-        col = layout.row(align=False)
-        col.scale_x = 1.5
-        col.scale_y = 1.5
-        col.prop(mytool, "pixel_enum")
-
-        if mytool.pixel_enum == "S6":
-            box = layout.box()
-            row = box.row(align=True)
-            row.label(text="Width:")
-            row.prop(mytool, "custom_height")
-            row.label(text="px")
-
-            row = box.row(align=True)
-            row.label(text="Height:")
-            row.prop(mytool, "custom_width")
-            row.label(text="px")
-
-        layout.prop(mytool, "check_box_trans")
-
-        col = layout.row(align=False)
-        col.scale_x = 1.5
-        col.scale_y = 1.5
-        col.operator("pixel.op_resolution")
-
-class PiXel_pl_Outline(PiXel_pl_Base, Panel):
-    bl_parent_id = "PiXel_pl_Setup"
-    bl_label = "Outline"
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def draw(self, context):
-        layout = self.layout
-        obj = context.object
-
-        if obj and obj.type == 'MESH':
-            has_emission = False
-            has_solidify = False
-
-            for mat in obj.data.materials:
-                if mat and mat.name == "Emission" and mat.use_nodes:
-                    nodes = mat.node_tree.nodes
-                    if "Emission" in nodes:
-                        layout.prop(nodes["Emission"].inputs[0], "default_value", text="Color")
-                        has_emission = True
-                        break
-
-            solidify_mod = obj.modifiers.get("Solidify")
-            if solidify_mod:
-                layout.prop(solidify_mod, "thickness")
-                layout.prop(solidify_mod, "offset")
-                layout.prop(solidify_mod, "use_even_offset")
-                layout.prop(solidify_mod, "use_rim")
-                layout.prop(solidify_mod, "use_flip_normals")
-                layout.prop(solidify_mod, "use_quality_normals")
-                layout.prop(solidify_mod, "material_offset")
-                has_solidify = True
-
-            if not has_emission or not has_solidify:
-                layout.label(text="Please setup the project", icon='INFO')
-        else:
-            self.report({'WARNING'}, "Please select a mesh object")
-
-@addon_updater_ops.make_annotations
-class PiXel_pdtr_Preferences(AddonPreferences):
-	bl_idname = __package__
-
-	# Addon updater preferences.
-
-	auto_check_update = bpy.props.BoolProperty(
-		name="Auto-check for Update",
-		description="If enabled, auto-check for updates using an interval",
-		default=False)
-
-	updater_interval_months = bpy.props.IntProperty(
-		name='Months',
-		description="Number of months between checking for updates",
-		default=0,
-		min=0)
-
-	updater_interval_days = bpy.props.IntProperty(
-		name='Days',
-		description="Number of days between checking for updates",
-		default=7,
-		min=0,
-		max=31)
-
-	updater_interval_hours = bpy.props.IntProperty(
-		name='Hours',
-		description="Number of hours between checking for updates",
-		default=0,
-		min=0,
-		max=23)
-
-	updater_interval_minutes = bpy.props.IntProperty(
-		name='Minutes',
-		description="Number of minutes between checking for updates",
-		default=0,
-		min=0,
-		max=59)
-
-	def draw(self, context):
-		layout = self.layout
-
-		mainrow = layout.row()
-		col = mainrow.column()
-
-		addon_updater_ops.update_settings_ui(self, context)
+icon_preview = {}
 
 classes = (
-    PiXel_pg_Resolution,
     PiXel_pl_Setup,
-    PiXel_pl_Resolution,
-    PiXel_pl_Outline,
     PiXel_op_Setup,
-    PiXel_op_Resolution,
-    PiXel_pdtr_Preferences,
 )
 
 def register():
-    addon_updater_ops.register(bl_info)
-
     for cls in classes:
         bpy.utils.register_class(cls)
-        bpy.types.Scene.cs_resolution = bpy.props.PointerProperty(type= PiXel_pg_Resolution)
+
+    pcoll = bpy.utils.previews.new()
+
+    absolute_path = os.path.join(os.path.dirname(__file__), 'data/')
+    relative_path = "icons"
+    path = os.path.join(absolute_path, relative_path)
+    pcoll.load("gumroad", os.path.join(path, "gumroad.png"), 'IMAGE')
+    icon_preview["main"] = pcoll
 
 def unregister():
-    addon_updater_ops.unregister()
-
     for cls in classes:
         bpy.utils.unregister_class(cls)
-        del bpy.types.Scene.cs_resolution
 
 if __name__ == "__main__":
     register()
